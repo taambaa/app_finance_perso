@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "216932429508",
+    "project_id": "app-gestion-finance-perso",
+    "storage_bucket": "app-gestion-finance-perso.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216932429508:android:dbbd272eb939da6b742391",
+        "android_client_info": {
+          "package_name": "com.example.app_finance_perso"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwc03dpuh1rc1EgZyRcDpCaeftpbN2LZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
