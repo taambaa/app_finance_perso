@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'app-gestion-finance-perso.firebasestorage.app',
     measurementId: 'G-MXP45XSE35',
   );
+
 }
