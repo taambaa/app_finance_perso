@@ -1,0 +1,36 @@
+// .devcontainer/devcontainer.json
+{
+    "name": "Flutter Development",
+    "image": "mcr.microsoft.com/devcontainers/universal:latest",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        },
+        "ghcr.io/devcontainers/features/python:1": {},
+        "ghcr.io/devcontainers/features/dart-flutter:1": {
+            "version": "latest"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "Dart-Code.flutter",
+                "Dart-Code.dart-code",
+                "ms-vscode.vscode-typescript-next",
+                "ms-vscode.js-debug",
+                "esbenp.prettier-vscode"
+            ]
+        }
+    },
+    "postCreateCommand": "npm install -g firebase-tools && dart pub global activate flutterfire_cli",
+    "remoteUser": "root",
+    "portsAttributes": {
+        "8080": {
+            "label": "Flutter Web App",
+            "onAutoForward": "notify"
+        }
+    }
+}
