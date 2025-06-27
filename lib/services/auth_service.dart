@@ -52,7 +52,7 @@ class AuthService {
       return await _auth.signOut();
     } catch (e) {
       print('Erreur lors de la déconnexion: $e');
-      return null; // ou throw e; si vous voulez propager l'erreur
+      return; // ou throw e; si vous voulez propager l'erreur
     }
   }
 }

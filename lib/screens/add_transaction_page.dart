@@ -57,10 +57,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           amount: amount,
           date: _selectedDate,
           type: _selectedType,
-          isDebit: _selectedType == 'expense', // isDebit true si c'est une dépense
         );
 
-        await _firestoreService.addTransaction(newTransaction);
+        // Utilise la méthode appropriée selon le type
+        if (_selectedType == 'income') {
+          // TODO: Créer une méthode addIncome dans FirestoreService
+          // await _firestoreService.addIncome(newTransaction);
+        } else {
+          // TODO: Créer une méthode addExpense dans FirestoreService
+          // await _firestoreService.addExpense(newTransaction);
+        }
 
         if (!mounted) return; // Vérifiez si le widget est toujours monté
         ScaffoldMessenger.of(context).showSnackBar(

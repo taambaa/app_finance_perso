@@ -2,57 +2,72 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:app_finance_perso/models/transaction.dart' as app_transaction; // Alias pour éviter conflit de nom
+import 'package:app_finance_perso/models/income.dart';
+import 'package:app_finance_perso/models/expense.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Récupérer toutes les transactions pour l'utilisateur actuellement connecté
-  Stream<List<app_transaction.Transaction>> getTransactions() {
-    User? user = _auth.currentUser; // Obtenir l'utilisateur actuel
-
-    if (user == null) {
-      // Si aucun utilisateur n'est connecté, retourner un stream vide
-      return Stream.value([]);
-    }
-
-    // Écouter les changements dans la collection 'transactions'
-    // Filtrer par 'userId' pour n'obtenir que les transactions de l'utilisateur connecté
-    // Ordonner par date (du plus récent au plus ancien)
-    return _db.collection('transactions')
-        .where('userId', isEqualTo: user.uid)
-        .orderBy('date', descending: true)
+  // INCOME
+  Stream<List<Income>> getIncomes() {
+    final user = _auth.currentUser;
+    if (user == null) return Stream.value([]);
+    return _db
+        .collection('users')
+        .doc(user.uid)
+        .collection('income')
+        .orderBy('income_date', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => app_transaction.Transaction.fromFirestore(doc))
-            .toList());
+        .map((snapshot) => snapshot.docs.map((doc) => Income.fromFirestore(doc)).toList());
   }
 
-  // Ajouter une nouvelle transaction
-  Future<void> addTransaction(app_transaction.Transaction transaction) async {
-    if (_auth.currentUser == null) {
-      print('Erreur: Aucun utilisateur connecté pour ajouter une transaction.');
-      return;
-    }
-    await _db.collection('transactions').add(transaction.toFirestore());
+  Future<void> addIncome(Income income) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await _db.collection('users').doc(user.uid).collection('income').add(income.toFirestore());
   }
 
-  // Mettre à jour une transaction existante
-  Future<void> updateTransaction(app_transaction.Transaction transaction) async {
-    if (_auth.currentUser == null) {
-      print('Erreur: Aucun utilisateur connecté pour mettre à jour une transaction.');
-      return;
-    }
-    await _db.collection('transactions').doc(transaction.id).update(transaction.toFirestore());
+  Future<void> updateIncome(Income income) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await _db.collection('users').doc(user.uid).collection('income').doc(income.id).update(income.toFirestore());
   }
 
-  // Supprimer une transaction
-  Future<void> deleteTransaction(String transactionId) async {
-    if (_auth.currentUser == null) {
-      print('Erreur: Aucun utilisateur connecté pour supprimer une transaction.');
-      return;
-    }
-    await _db.collection('transactions').doc(transactionId).delete();
+  Future<void> deleteIncome(String incomeId) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await _db.collection('users').doc(user.uid).collection('income').doc(incomeId).delete();
+  }
+
+  // EXPENSE
+  Stream<List<Expense>> getExpenses() {
+    final user = _auth.currentUser;
+    if (user == null) return Stream.value([]);
+    return _db
+        .collection('users')
+        .doc(user.uid)
+        .collection('expense')
+        .orderBy('income_date', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Expense.fromFirestore(doc)).toList());
+  }
+
+  Future<void> addExpense(Expense expense) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await _db.collection('users').doc(user.uid).collection('expense').add(expense.toFirestore());
+  }
+
+  Future<void> updateExpense(Expense expense) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await _db.collection('users').doc(user.uid).collection('expense').doc(expense.id).update(expense.toFirestore());
+  }
+
+  Future<void> deleteExpense(String expenseId) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await _db.collection('users').doc(user.uid).collection('expense').doc(expenseId).delete();
   }
 }

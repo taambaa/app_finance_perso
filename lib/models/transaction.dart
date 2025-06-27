@@ -14,7 +14,6 @@ class Transaction {
     required this.id,
     required this.userId,
     required this.description,
-    required this.isDebit,
     required this.amount,
     required this.date,
     required this.type,

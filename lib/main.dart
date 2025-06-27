@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       // Le point d'entrée de l'application sera la page AuthCheck.
       // Cette page décidera si l'utilisateur doit voir l'écran de connexion ou le tableau de bord.
-      home: AuthCheck(), 
+      home: const AuthCheck(), 
     );
   }
 }
