@@ -12,6 +12,7 @@ import 'income/add_income_page.dart';
 import 'income/list_income_page.dart';
 import 'expense/add_expense_page.dart';
 import 'expense/list_expense_page.dart';
+import 'statistics_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -128,6 +129,19 @@ class DashboardPage extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+                        const SizedBox(height: 16),
+                        // Bouton statistiques
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.analytics),
+                          label: const Text('Voir les statistiques'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple,
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => const StatisticsPage()),
+                          ),
                         ),
                       ],
                     );

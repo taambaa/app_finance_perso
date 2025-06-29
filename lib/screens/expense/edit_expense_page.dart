@@ -63,13 +63,13 @@ class _EditExpensePageState extends State<EditExpensePage> {
         await _firestoreService.updateExpense(updatedExpense);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Dépense modifiée avec succès !')),
+          const SnackBar(content: Text('Dépense modifiée avec succès !'), backgroundColor: Colors.green),
         );
         Navigator.of(context).pop();
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de la modification: $e')),
+          SnackBar(content: Text('Erreur lors de la modification: $e'), backgroundColor: Colors.red),
         );
       }
     }
@@ -79,8 +79,8 @@ class _EditExpensePageState extends State<EditExpensePage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Supprimer cette dépense ?'),
-        content: const Text('Cette action est irréversible.'),
+        title: const Text('Confirmer la suppression'),
+        content: const Text('Voulez-vous vraiment supprimer cette dépense ?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -88,7 +88,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Supprimer'),
+            child: const Text('Supprimer', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -96,10 +96,10 @@ class _EditExpensePageState extends State<EditExpensePage> {
     if (confirm == true) {
       await _firestoreService.deleteExpense(widget.expense.id);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Dépense supprimée.')),
-      );
       Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Dépense supprimée.'), backgroundColor: Colors.red),
+      );
     }
   }
 
@@ -110,7 +110,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
         title: const Text('Modifier la dépense'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: _deleteExpense,
             tooltip: 'Supprimer',
           ),

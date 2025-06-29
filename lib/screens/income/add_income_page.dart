@@ -53,13 +53,19 @@ class _AddIncomePageState extends State<AddIncomePage> {
         await _firestoreService.addIncome(newIncome);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Revenu ajouté avec succès !')),
+          const SnackBar(
+            content: Text('Revenu ajouté avec succès !'),
+            backgroundColor: Colors.green,
+          ),
         );
         Navigator.of(context).pop();
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de l\'ajout: $e')),
+          SnackBar(
+            content: Text('Erreur lors de l\'ajout: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -70,6 +76,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter un revenu'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -77,10 +84,12 @@ class _AddIncomePageState extends State<AddIncomePage> {
           key: _formKey,
           child: ListView(
             children: [
+              // Champ Label
               TextFormField(
                 controller: _labelController,
                 decoration: const InputDecoration(
                   labelText: 'Nom du revenu',
+                  prefixIcon: Icon(Icons.attach_money),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -91,10 +100,13 @@ class _AddIncomePageState extends State<AddIncomePage> {
                 },
               ),
               const SizedBox(height: 20),
+
+              // Champ Montant
               TextFormField(
                 controller: _amountController,
                 decoration: const InputDecoration(
                   labelText: 'Montant',
+                  prefixIcon: Icon(Icons.euro),
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
@@ -105,28 +117,47 @@ class _AddIncomePageState extends State<AddIncomePage> {
                   if (double.tryParse(value) == null) {
                     return 'Veuillez entrer un nombre valide';
                   }
+                  if (double.parse(value) <= 0) {
+                    return 'Le montant doit être positif';
+                  }
                   return null;
                 },
               ),
               const SizedBox(height: 20),
-              ListTile(
-                title: Text('Date: ${_selectedDate.toLocal().toString().split(' ')[0]}'),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () => _selectDate(context),
+
+              // Sélecteur de date
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.calendar_today),
+                  title: Text('Date: ${_selectedDate.toLocal().toString().split(' ')[0]}'),
+                  trailing: const Icon(Icons.arrow_drop_down),
+                  onTap: () => _selectDate(context),
+                ),
               ),
               const SizedBox(height: 20),
+
+              // Champ Description
               TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(
                   labelText: 'Description (facultatif)',
+                  prefixIcon: Icon(Icons.description),
                   border: OutlineInputBorder(),
                 ),
-                maxLines: 2,
+                maxLines: 3,
               ),
               const SizedBox(height: 30),
-              ElevatedButton(
+
+              // Bouton d'ajout
+              ElevatedButton.icon(
                 onPressed: _addIncome,
-                child: const Text('Ajouter le revenu'),
+                icon: const Icon(Icons.add),
+                label: const Text('Ajouter le revenu'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
               ),
             ],
           ),

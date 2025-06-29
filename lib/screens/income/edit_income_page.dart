@@ -63,13 +63,13 @@ class _EditIncomePageState extends State<EditIncomePage> {
         await _firestoreService.updateIncome(updatedIncome);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Revenu modifié avec succès !')),
+          const SnackBar(content: Text('Revenu modifié avec succès !'), backgroundColor: Colors.green),
         );
         Navigator.of(context).pop();
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de la modification: $e')),
+          SnackBar(content: Text('Erreur lors de la modification: $e'), backgroundColor: Colors.red),
         );
       }
     }
@@ -79,8 +79,8 @@ class _EditIncomePageState extends State<EditIncomePage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Supprimer ce revenu ?'),
-        content: const Text('Cette action est irréversible.'),
+        title: const Text('Confirmer la suppression'),
+        content: const Text('Voulez-vous vraiment supprimer ce revenu ?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -88,7 +88,7 @@ class _EditIncomePageState extends State<EditIncomePage> {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Supprimer'),
+            child: const Text('Supprimer', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -96,10 +96,10 @@ class _EditIncomePageState extends State<EditIncomePage> {
     if (confirm == true) {
       await _firestoreService.deleteIncome(widget.income.id);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Revenu supprimé.')),
-      );
       Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Revenu supprimé.'), backgroundColor: Colors.red),
+      );
     }
   }
 
@@ -110,7 +110,7 @@ class _EditIncomePageState extends State<EditIncomePage> {
         title: const Text('Modifier le revenu'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: _deleteIncome,
             tooltip: 'Supprimer',
           ),
